@@ -20,7 +20,7 @@ The following are installed:-
 -   Postfix mail server (securely configured to be outgoing only)
 -   Zend OPcache
 -   EXtplorer 
-[Script features]
+## F
 - Installation information is simple.
 - Using Nginx repo instead of compile from source as other scripts makes installing Nginx faster, later upgrading is also a lot easier.
 - Replace MySQL with MariaDB to keep up with the trend (this is an improved version of MySQL, which works similarly but for higher performance than MySQL, and the latest version of CentOS 7 officially supports MariaDB).
