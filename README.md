@@ -1,37 +1,35 @@
-## Welcome to GitHub Pages
+### BreakBuild Readme
 
-You can use the [editor on GitHub](https://github.com/BREAKTEAM/BreakBuild/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+BreakBuild is a free collection of shell scripts deployment of
+LEMP (Linux, Nginx, MySQL and PHP) for Centos
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Have you considered upgrading from shared hosting to a VPS or dedicated
+server but held off by the costly control panel licenses, or the fear of
+managing a Linux server? Now you can leave those worries behind!
 
-### Markdown
+BreakBuild scripts automate configuration of servers for web hosting,
+so your websites can be online within minutes! Ideal for those who
+prefer hosting sites on their own server without resorting to expensive
+and bloated control panels.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+The following are installed:-
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/BREAKTEAM/BreakBuild/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+-   Nginx
+-   MariaDB  (Percona, PostgreSQL comming soon)
+-   PHP-FPM + commonly used PHP modules
+-   Postfix mail server (securely configured to be outgoing only)
+-   Zend OPcache
+-   EXtplorer 
+[Script features]
+- Installation information is simple.
+- Using Nginx repo instead of compile from source as other scripts makes installing Nginx faster, later upgrading is also a lot easier.
+- Replace MySQL with MariaDB to keep up with the trend (this is an improved version of MySQL, which works similarly but for higher performance than MySQL, and the latest version of CentOS 7 officially supports MariaDB).
+- Option to use PHP version 7.1 (latest), PHP 7.0, PHP 5.6 installation.
+- There is an eXtplorer File Manager.
+- Automatically install the Zend Opcache module and can monitor status on the web.
+- Automatic update for Nginx, PHP, MariaDB.
+- Monitor status server on the web, can use mobile access anywhere.
+- Change the default SSH port from 22 to 2411 SSH Brute Force Attack, with Fail2ban block IP immediately if the wrong login 3 times.
+## Install
+curl -sO http://aishee.net/break/install && chmod +x install && ./install
+- Command : breakteam
