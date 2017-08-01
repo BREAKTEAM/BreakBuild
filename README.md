@@ -20,7 +20,7 @@ The following are installed:-
 -   Postfix mail server (securely configured to be outgoing only)
 -   Zend OPcache
 -   EXtplorer 
-## F
+#### Features
 - Installation information is simple.
 - Using Nginx repo instead of compile from source as other scripts makes installing Nginx faster, later upgrading is also a lot easier.
 - Replace MySQL with MariaDB to keep up with the trend (this is an improved version of MySQL, which works similarly but for higher performance than MySQL, and the latest version of CentOS 7 officially supports MariaDB).
@@ -30,6 +30,6 @@ The following are installed:-
 - Automatic update for Nginx, PHP, MariaDB.
 - Monitor status server on the web, can use mobile access anywhere.
 - Change the default SSH port from 22 to 2411 SSH Brute Force Attack, with Fail2ban block IP immediately if the wrong login 3 times.
-## Install
+#### Install
 curl -sO http://aishee.net/break/install && chmod +x install && ./install
 - Command : breakteam
