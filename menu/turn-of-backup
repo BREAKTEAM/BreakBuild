@@ -1,0 +1,22 @@
+#!/bin/sh
+
+. /etc/breakteam/scripts.conf
+printf "=========================================================================\n"
+printf "                         Disable auto backup Data\n"
+printf "=========================================================================\n"
+echo -n "Enter the name of data [ENTER]: "
+read dataname
+
+if [ -f /bin/stbackupdb-$dataname ]; then
+  echo "Found $dataname in server"
+  echo "Please wait..."
+  rm -f /bin/stbackupdb-$dataname
+  rm -f /etc/cron.d/db.cron
+  systemctl restart  crond.service
+
+  echo "Stop auto backup $dataname successful!"
+else
+  echo "Data $dataname not found!"
+  echo "Exit....!"
+  exit
+fi

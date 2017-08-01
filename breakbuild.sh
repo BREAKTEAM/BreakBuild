@@ -59,7 +59,7 @@ prompt="Enter selection [1-3]: "
 php_version="7.1"; # Default PHP 7.1
 options=("PHP 7.1" "PHP 7.0" "PHP 5.6")
 PS3="$prompt"
-select opt in "${options[@]}"; do 
+select opt in "${options[@]}"; do
 
     case "$REPLY" in
     1) php_version="7.1"; break;;
@@ -68,17 +68,17 @@ select opt in "${options[@]}"; do
     $(( ${#options[@]}+1 )) ) printf "\nSetup PHP 7.1\n"; break;;
     *) printf "Invalid, the system will install by default PHP 7.1\n"; break;;
     esac
-    
+
 done
 
-printf "\Enter the default domain (www/non-www) [ENTER]: " 
+printf "\Enter the default domain (www/non-www) [ENTER]: "
 read server_name
 if [ "$server_name" = "" ]; then
 	server_name="breakteam.co"
 	echo "Invalid, domain default = breakteam.co"
 fi
 
-printf "\nEnter the port manager [ENTER]: " 
+printf "\nEnter the port manager [ENTER]: "
 read admin_port
 if [ "$admin_port" == "" ] || [ $admin_port == "7777" ] || [ $admin_port -lt 2000 ] || [ $admin_port -gt 9999 ] || [ $(lsof -i -P | grep ":$admin_port " | wc -l) != "0" ]; then
 	admin_port="2411"
@@ -87,6 +87,7 @@ if [ "$admin_port" == "" ] || [ $admin_port == "7777" ] || [ $admin_port -lt 200
 fi
 
 printf "=========================================================================\n"
+printf "                           BREAK TEAM                                    \n"
 printf "Preparation is complete \n"
 printf "=========================================================================\n"
 
@@ -119,6 +120,7 @@ yum -y update
 
 clear
 printf "=========================================================================\n"
+printf "                           BREAK TEAM                                    \n"
 printf "Start the installation... \n"
 printf "=========================================================================\n"
 sleep 3
@@ -155,6 +157,7 @@ hwclock --systohc
 
 clear
 printf "=========================================================================\n"
+printf "                           BREAK TEAM                                    \n"
 printf "Start configuration... \n"
 printf "=========================================================================\n"
 sleep 3
@@ -199,7 +202,7 @@ if [ "$check_phplowmem" == "1" ]; then
 	lessphpmem=y
 fi
 
-if [[ "$lessphpmem" = [yY] ]]; then  
+if [[ "$lessphpmem" = [yY] ]]; then
 	# echo -e "\nCopying php-fpm-min.conf /etc/php-fpm.d/www.conf\n"
 	wget -q $script_root/config/php-fpm/php-fpm-min.conf -O /etc/php-fpm.conf
 	wget -q $script_root/config/php-fpm/www-min.conf -O /etc/php-fpm.d/www.conf
@@ -345,13 +348,13 @@ http {
 
 	#Disable IFRAME
 	add_header X-Frame-Options SAMEORIGIN;
-	
+
 	#Prevent Cross-site scripting (XSS) attacks
 	add_header X-XSS-Protection "1; mode=block";
-	
+
 	#Prevent MIME-sniffing
 	add_header X-Content-Type-Options nosniff;
-	
+
 	access_log  off;
 	sendfile on;
 	tcp_nopush on;
@@ -370,7 +373,7 @@ http {
 	keepalive_disable msie6;
 	reset_timedout_connection on;
 	send_timeout 60s;
-	
+
 	gzip on;
 	gzip_static on;
 	gzip_disable "msie6";
@@ -428,30 +431,30 @@ fi
 cat > "/etc/nginx/conf.d/$server_name.conf" <<END
 server {
 	listen 80;
-	
+
 	server_name $server_name_alias;
 	rewrite ^(.*) http://$server_name\$1 permanent;
 }
 
 server {
 	listen 80 default_server;
-		
+
 	# access_log off;
 	access_log /home/$server_name/logs/access.log;
 	# error_log off;
     	error_log /home/$server_name/logs/error.log;
-	
+
     	root /home/$server_name/public_html;
 	index index.php index.html index.htm;
     	server_name $server_name;
- 
+
     	location / {
 		try_files \$uri \$uri/ /index.php?\$args;
 	}
-	
+
 	# Custom configuration
 	include /home/$server_name/public_html/*.conf;
- 
+
     	location ~ \.php$ {
 		fastcgi_split_path_info ^(.+\.php)(/.+)$;
         	include /etc/nginx/fastcgi_params;
@@ -467,7 +470,7 @@ server {
 		fastcgi_intercept_errors on;
         	fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
     	}
-	
+
 	location /nginx_status {
   		stub_status on;
   		access_log   off;
@@ -475,7 +478,7 @@ server {
 		allow $server_ip;
 		deny all;
 	}
-	
+
 	location /php_status {
 		fastcgi_pass 127.0.0.1:9000;
 		fastcgi_index index.php;
@@ -485,22 +488,22 @@ server {
 		allow $server_ip;
 		deny all;
     	}
-	
+
 	location ~ /\. {
 		deny all;
 	}
-	
+
         location = /favicon.ico {
                 log_not_found off;
                 access_log off;
         }
-	
+
 	location = /robots.txt {
 		allow all;
 		log_not_found off;
 		access_log off;
 	}
-	
+
 	location ~* \.(3gp|gif|jpg|jpeg|png|ico|wmv|avi|asf|asx|mpg|mpeg|mp4|pls|mp3|mid|wav|swf|flv|exe|zip|tar|rar|gz|tgz|bz2|uha|7z|doc|docx|xls|xlsx|pdf|iso|eot|svg|ttf|woff)$ {
 	        gzip_static off;
 		add_header Pragma public;
@@ -521,23 +524,23 @@ server {
 
 server {
 	listen $admin_port;
-	
+
  	access_log off;
 	log_not_found off;
  	error_log /home/$server_name/logs/nginx_error.log;
-	
+
     	root /home/$server_name/private_html;
 	index index.php index.html index.htm;
     	server_name $server_name;
-	
+
 	auth_basic "Restricted";
 	auth_basic_user_file /home/$server_name/private_html/breakteam/.htpasswd;
- 
+
      	location / {
 		autoindex on;
 		try_files \$uri \$uri/ /index.php;
 	}
-	
+
     	location ~ \.php$ {
 		fastcgi_split_path_info ^(.+\.php)(/.+)$;
         	include /etc/nginx/fastcgi_params;
@@ -553,7 +556,7 @@ server {
 		fastcgi_intercept_errors on;
         	fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
     	}
-	
+
 	location ~ /\. {
 		deny all;
 	}
@@ -617,6 +620,7 @@ rm -f /var/lib/mysql/ibdata1
 
 clear
 printf "=========================================================================\n"
+printf "                           BREAK TEAM                                    \n"
 printf "MariaDB configuration... \n"
 printf "=========================================================================\n"
 # Random password for MySQL root account
@@ -663,6 +667,7 @@ rm -f mariadb10_3tables.sql
 if [ "$1" = "wordpress" ]; then
 	clear
 	printf "=========================================================================\n"
+	printf "                           BREAK TEAM                                    \n"
 	printf "Setup wordpress... \n"
 	printf "=========================================================================\n"
 	cd /home/$server_name/public_html/
@@ -670,7 +675,7 @@ if [ "$1" = "wordpress" ]; then
 	# Generate wordpress database
 	wordpress_password=`date |md5sum |cut -c '1-15'`
 	mysql -u root -p"$root_password" -e "CREATE DATABASE wordpress;GRANT ALL PRIVILEGES ON wordpress.* TO wordpress@localhost IDENTIFIED BY '$wordpress_password';FLUSH PRIVILEGES;"
-	
+
 	# Download latest WordPress and uncompress
 	wget https://wordpress.org/latest.tar.gz
 	tar zxf latest.tar.gz
@@ -690,6 +695,7 @@ fi
 
 clear
 printf "=========================================================================\n"
+printf "                           BREAK TEAM                                    \n"
 printf "Configuration successful... \n"
 printf "=========================================================================\n"
 # BreakBuild Script Admin
@@ -856,7 +862,8 @@ chmod +x /etc/breakteam/menu/*
 clear
 cat > "/root/breakteam.txt" <<END
 =========================================================================
-                           MANAGE VPS INFORMATION                        
+                                  BREAK TEAM
+                           MANAGE VPS INFORMATION
 =========================================================================
 Command access BreakBuild scripts: breakteam
 
@@ -878,6 +885,7 @@ chmod 600 /root/breakteam.txt
 
 if [ "$1" = "wordpress" ]; then
 	printf "=========================================================================\n"
+	printf "                           BREAK TEAM                                    \n"
 	printf "Install successful BreakBuild Script + WordPress! \n"
 	printf "=========================================================================\n"
 	printf "Access http://$server_name \n or http://$server_ip to config Wordpress \n"

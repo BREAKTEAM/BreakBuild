@@ -1,0 +1,46 @@
+#!/bin/bash
+
+. /etc/breakteam/scripts.conf
+
+
+saoluudata ()
+{
+  echo "Backup data $dataname..."
+  mkdir -p /home/$server_name/private_html/backup/$dataname
+  cd /home/$server_name/private_html/backup/$dataname
+  mysqldump -u root -p$mariadb_root_password $dataname | gzip -9 > $dataname.sql.gz
+
+  echo "Backup Successful!"
+  echo "Path file backup: /home/$server_name/private_html/backup/$dataname/$dataname.sql.gz"
+  echo "Link download: http://$server_name:$admin_port/backup/$dataname/$dataname.sql.gz"
+}
+
+printf "=========================================================================\n"
+printf "                             Backup Data\n"
+printf "=========================================================================\n"
+echo -n "Enter name of database want backup [ENTER]: "
+read dataname
+
+if [ -f /var/lib/mysql/$dataname/db.opt ]; then
+  echo "Found $dataname in server"
+  if [ -f /home/$server_name/private_html/backup/$dataname/$dataname.sql.gz ]; then
+    read -r -p "Detect old data, i want delete ? [y/N] " response
+    case $response in
+      [yY][eE][sS]|[yY])
+        rm -rf /home/$server_name/private_html/backup/$dataname
+
+        saoluudata
+      ;;
+      *)
+        echo "Goodbye....!"
+      ;;
+    esac
+  else
+    saoluudata
+  fi
+
+else
+  echo "Not found $dataname, please try again!"
+  echo "Goodbye...!"
+  exit
+fi

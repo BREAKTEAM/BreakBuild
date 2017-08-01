@@ -1,0 +1,14 @@
+#!/bin/bash
+
+. /etc/breakteam/scripts.conf
+
+printf "=========================================================================\n"
+printf "                          Permission WebServer\n"
+printf "=========================================================================\n"
+
+chown -R nginx:nginx /home/*/public_html
+chown -R nginx:nginx /home/*/private_html
+chown -R nginx:nginx /var/lib/php
+echo -n "Successful!"
+
+exit

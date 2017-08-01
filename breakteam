@@ -1,0 +1,41 @@
+#!/bin/sh
+
+. /etc/breaktam/scripts.conf
+
+clear
+prompt="Enter the selection:"
+options=("List Domain" "Add Domain" "Delete Domain" "Backup Code" "Backup Data" "Auto Backup" "Turn Off Auto Backup" "Create Database" "Delete Database" "Change VPS" "Change Admin" "Add Domain" "Add Redirect Domain" "Change Permission" "Upgrade Server") # End Options
+
+printf "=========================================================================\n"
+printf "                      BREAM TEAM - BreakBuild Script                     \n"
+printf "=========================================================================\n"
+printf "                                Menu\n"
+printf "=========================================================================\n"
+PS3="
+$prompt"
+select opt in "${options[@]}" "Exit"; do
+
+    case "$REPLY" in
+	    1 ) /etc/breakteam/menu/list-domain;;
+	    2 ) /etc/breakteam/menu/add-domain;;
+	    3 ) /etc/breakteam/menu/delete-domain;;
+	    4 ) /etc/breakteam/menu/backup-code;;
+	    5 ) /etc/breakteam/menu/backup-data;;
+	    6 ) /etc/breakteam/menu/auto-backup;;
+	    7 ) /etc/breakteam/menu/turn-of-backup;;
+	    8 ) /etc/breakteam/menu/add-database;;
+	    9 ) /etc/breakteam/menu/delete-database;;
+	    10 ) /etc/breakteam/menu/change-pass;;
+	    11 ) /etc/breakteam/menu/change-port-admin;;
+	    12 ) /etc/breakteam/menu/park-domain;;
+	    13 ) /etc/breakteam/menu/forward-domain;;
+	    14 ) /etc/breakteam/menu/permission;;
+	    15 ) /etc/breakteam/menu/upgrade-server;;
+	    # End Menu
+
+	    $(( ${#options[@]}+1 )) ) printf "\nGoodbye!\nExit.......\n\n"; break;;
+	    *) echo "Invalid, please try again";continue;;
+
+    esac
+
+done

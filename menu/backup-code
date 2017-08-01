@@ -1,0 +1,46 @@
+#!/bin/bash
+
+. /etc/breakteam/scripts.conf
+
+saoluucode()
+{
+  echo "Backup website $website, please wait...."
+  cd /home/$website/public_html/
+  tar czf $website.tar.gz *
+
+  mkdir -p /home/$server_name/private_html/backup/$website/
+  mv $website.tar.gz /home/$server_name/private_html/backup/$website/$website.tar.gz
+
+  echo "Backup website $website successful..."
+  echo "Path file back: /home/$server_name/private_html/backup/$website/$website.tar.gz"
+  echo "Link download: http://$server_name:$admin_port/backup/$website/$website.tar.gz"
+}
+
+printf "=========================================================================\n"
+printf "                             Backup Code\n"
+printf "=========================================================================\n"
+echo -n "Enter the website [ENTER]: "
+read website
+
+if [ -f /home/$website/public_html/index.php ]; then
+  echo "Found $website in server"
+  if [ -f /home/$server_name/private_html/backup/$website/$website.tar.gz ]; then
+    read -r -p "You want delete old backup ? [y/N] " response
+    case $response in
+      [yY][eE][sS]|[yY])
+        rm -rf /home/$server_name/private_html/backup/$website/
+
+        saoluucode
+      ;;
+      *)
+        echo "Goodbye....!"
+      ;;
+    esac
+  else
+    saoluucode
+  fi
+else
+  echo "Not found website $website"
+  echo "Goodbye...!"
+  exit
+fi

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+. /etc/breakteam/scripts.conf
+
+printf "Upgrade Nginx...\n\n"
+yum -y upgrade nginx
+exit

@@ -1,0 +1,57 @@
+#!/bin/bash
+
+. /etc/breakteam/scripts.conf
+
+if [ "`systemctl is-active mysql.service`" == "active" ]; then
+  printf "=========================================================================\n"
+  printf "                             Create Database\n"
+  printf "=========================================================================\n"
+  echo -n "Name of database [ENTER]: "
+  read dataname
+  if [ "$dataname" = "" ]; then
+    echo "Invalid, please try again"
+    exit
+  fi
+
+  if [ -f /var/lib/mysql/$dataname/db.opt ]; then
+    echo "Data $dataname exists"
+    echo "Goodbye....!"
+    exit
+  fi
+
+  echo -n "Username [ENTER]: "
+  read username
+  if [ "$username" = "" ]; then
+    username="$dataname"
+    echo "Invalid, default username: $dataname"
+  fi
+
+  echo -n "Password $username [ENTER]: "
+  read password
+  if [ "$password" = "" ]; then
+    password="$dataname"
+    echo "Invalid, default password $dataname"
+  fi
+
+    cat > "/tmp/config.temp" <<END
+CREATE DATABASE $dataname COLLATE utf8_general_ci;
+CREATE USER '$username'@'localhost' IDENTIFIED BY '$password';
+GRANT ALL PRIVILEGES ON $dataname . * TO '$username'@'localhost';
+FLUSH PRIVILEGES;
+END
+
+  mysql -u root -p$mariadb_root_password < /tmp/config.temp
+  rm -f /tmp/config.temp
+
+  echo "Create $dataname successful !"
+  echo "==================="
+  echo "Infomation:"
+  printf "Database: $dataname\nUsername: $username\nPassword: $password\n\n"
+
+  echo "Goodbye....!"
+
+else
+  echo "SQL required enabled!!!"
+  echo "Please try again"
+  exit
+fi

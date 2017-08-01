@@ -1,0 +1,90 @@
+#!/bin/sh
+
+. /etc/breakteam/scripts.conf
+
+printf "=========================================================================\n"
+printf "                          Auto Backup Data\n"
+printf "=========================================================================\n"
+
+echo -n "Name data want using [ENTER]: "
+read dataname
+if [ -f /bin/stbackupdb-$dataname ]; then
+  echo "Data $dataname is autobackup!"
+  echo "Exit...!"
+  exit
+fi
+
+if [ -f /var/lib/mysql/$dataname/db.opt ]; then
+
+  echo -n "Time auto backup ?[0-23]: "
+  read gio
+
+  if [ "$gio" = "" ]; then
+    gio="6"
+    echo "Invalid, default 6AM"
+  fi
+
+  echo -n "Day auto backup ?[0-7]: "
+  read thu
+
+  if [ "$thu" = "" ]; then
+    thu="2"
+    echo "Invalid, default monday"
+  fi
+
+  if [ "$thu" = "0" ] || [ "$thu" = "7" ]; then
+    thu12="chu nhat"
+  fi
+  if [ "$thu" = "1" ]; then
+    thu12="thu 2"
+  fi
+  if [ "$thu" = "2" ]; then
+    thu12="thu 3"
+  fi
+  if [ "$thu" = "3" ]; then
+    thu12="thu 4"
+  fi
+  if [ "$thu" = "4" ]; then
+    thu12="thu 5"
+  fi
+  if [ "$thu" = "5" ]; then
+    thu12="thu 6"
+  fi
+  if [ "$thu" = "6" ]; then
+    thu12="thu 7"
+  fi
+
+  read -r -p "You want auto backup $dataname in $gio h everyday ? [y/N] " response
+  case $response in
+    [yY][eE][sS]|[yY])
+cat > "/bin/stbackupdb-$dataname" <<END
+#!/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+rm -rf /home/$server_name/private_html/backup/$dataname
+mkdir -p /home/$server_name/private_html/backup/$dataname
+cd /home/$server_name/private_html/backup/$dataname
+
+mysqldump -u root -p$mariadb_root_password $dataname | gzip -9 > $dataname.sql.gz
+END
+
+      chmod +x /bin/stbackupdb-$dataname
+
+
+cat >> "/etc/cron.d/db.cron" <<END
+SHELL=/bin/sh
+0 $gio * * $thu root /bin/stbackupdb-$dataname >/dev/null 2>&1
+END
+      systemctl restart  crond.service
+
+      echo "Data $dataname autobackup in $gio h  everyday. Email notification for you."
+    ;;
+    *)
+      echo "Exit....!"
+    ;;
+  esac
+else
+  echo "Not found $dataname !"
+  echo "Exit...!"
+  exit
+fi

@@ -1,0 +1,51 @@
+#!/bin/bash
+
+. /etc/breakteam/scripts.conf
+printf "=========================================================================\n"
+printf "                           Forward Domain\n"
+printf "=========================================================================\n"
+
+echo -n "Enter the domain [ENTER]: "
+read domain
+if [ "$domain" = "" ]; then
+  echo "Invalid, please try again"
+  exit
+fi
+
+if [ -f /etc/nginx/conf.d/$domain.conf ]; then
+  echo "Domain $domain exists!!!"
+  echo "Please delete domain $domain, and try again !!!"
+  exit
+fi
+
+echo -n "Enter the new domain want $domain forward: "
+read domain_forward
+if [ "$domain_forward" = "" ]; then
+  echo "Invalid, please try again!"
+  exit
+fi
+
+echo
+echo "You want add $domain"
+read -r -p "And forward to $domain_forward ? [y/N] " response
+case $response in
+  [yY][eE][sS]|[yY])
+    domain_alias="www.$domain"
+
+    if [[ $domain == *www* ]]; then
+      domain_alias=${domain/www./''}
+    fi
+
+		cat >> "/etc/nginx/conf.d/$domain.conf" <<END
+server {
+	    server_name $domain $domain_alias;
+	    rewrite ^(.*) http://$domain_forward\$1 permanent;
+}
+END
+    nginx -s reload
+    echo "$domain add to system and forward to $domain_forward"
+  ;;
+  *)
+    echo "Goodbye....!"
+  ;;
+esac

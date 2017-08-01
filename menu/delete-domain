@@ -1,0 +1,36 @@
+#!/bin/bash
+
+. /etc/breakteam/scripts.conf
+
+printf "=========================================================================\n"
+printf "                             Delete Domain\n"
+printf "=========================================================================\n"
+
+echo -n "Enter the domain [ENTER]: "
+read domain
+
+if [ "$domain" = "$server_name" ]; then
+  echo "Domain default can't delete !!!!"
+  echo "Exit...!"
+  exit
+fi
+
+if [ -f /etc/nginx/conf.d/$domain.conf ]; then
+  read -r -p "Found $domain, you want delete ? [y/N] " response
+  case $response in
+    [yY][eE][sS]|[yY])
+      rm -rf /home/$domain
+      rm -f /etc/nginx/conf.d/$domain.conf
+      nginx -s reload
+
+      echo "Delete domain successful...!"
+    ;;
+    *)
+      echo "Exit....!"
+    ;;
+  esac
+else
+  echo "Domain $domain not found!"
+  echo "Exit....!"
+  exit
+fi

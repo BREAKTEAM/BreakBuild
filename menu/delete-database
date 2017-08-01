@@ -1,0 +1,38 @@
+#!/bin/bash
+
+. /etc/breakteam/scripts.conf
+
+if [ "`systemctl is-active mysql.service`" == "active" ]; then
+  printf "=========================================================================\n"
+  printf "                             Delete Database\n"
+  printf "=========================================================================\n"
+
+  echo -n "Enter database [ENTER]: "
+  read dataname
+
+  if [ -f /var/lib/mysql/$dataname/db.opt ]; then
+    read -r -p "Found $dataname, you want delete ? [y/N] " response
+    case $response in
+      [yY][eE][sS]|[yY])
+    cat > "/tmp/config.temp" <<END
+drop database $dataname;
+END
+
+        mysql -u root -p$mariadb_root_password < /tmp/config.temp
+        rm -f /tmp/config.temp
+        echo "Delete $dataname successful !"
+      ;;
+      *)
+        echo "Exit....!"
+      ;;
+    esac
+  else
+    echo "Data $dataname not found!!"
+    echo "Exit....!"
+    exit
+  fi
+else
+  echo "Please start MariaDB!!!"
+  echo "Exit"
+  exit
+fi

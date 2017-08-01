@@ -1,0 +1,27 @@
+#!/bin/bash
+
+. /etc/breakteam/scripts.conf
+
+prompt="Enter the selection: "
+options=("Check update" "Upgrade Nginx" "Upgrade PHP" "Upgrade MariaDB")
+printf "=========================================================================\n"
+printf "                           Upgrade server\n"
+printf "=========================================================================\n"
+printf "If new version exists, system will is upgrade.                           \n"
+printf "=========================================================================\n"
+PS3="
+$prompt"
+select opt in "${options[@]}" "Exit"; do
+
+    case "$REPLY" in
+	    1 ) /etc/breakteam/menu/check-update;;
+	    2 ) /etc/breakteam/menu/upgrade-nginx;;
+	    3 ) /etc/breakteam/menu/upgrade-php;;
+	    4 ) /etc/breakteam/menu/upgrade-mariadb;;
+
+	    $(( ${#options[@]}+1 )) ) printf "\nBye bye....!\n"; break;;
+	    *) echo "Invalid, please try again!";continue;;
+
+    esac
+
+done

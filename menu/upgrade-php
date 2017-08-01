@@ -1,0 +1,9 @@
+#!/bin/bash
+
+. /etc/breakteam/scripts.conf
+
+printf "Upgrade PHP...\n\n"
+php_version=`rpm -qa php-fpm | awk -F[-] '{print $3}'`
+yum -y upgrade php-*
+
+exit
