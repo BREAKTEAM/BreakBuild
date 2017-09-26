@@ -6,8 +6,8 @@
 #######################################################
 break_vers="1.0.0"
 phpmyadmin_version="4.7.0" # Released 2017-03-29. Compatible with PHP 5.5 to 7.1 and MySQL 5.5 and newer
-script_root="https://aishee.net/scripts"
-script_url="https://aishee.net/scripts/7"
+script_root="https://aishee.net/breakbuild"
+script_url="https://aishee.net/breakbuild/breakbuild.sh"
 low_ram='262144' # 256MB
 
 yum -y install gawk bc wget lsof
