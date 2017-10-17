@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. /etc/breaktam/scripts.conf
+. /etc/breakteam/scripts.conf
 
 clear
 prompt="Enter the selection:"
