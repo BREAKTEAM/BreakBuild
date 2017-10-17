@@ -146,7 +146,7 @@ else
 fi
 
 # Install MariaDB
-yum -y install mariadb-server mariadb
+yum -y install MariaDB-server MariaDB-client
 
 # Install Others
 yum -y install exim syslog-ng syslog-ng-libdbi cronie iptables-services fail2ban unzip zip nano openssl ntpdate
