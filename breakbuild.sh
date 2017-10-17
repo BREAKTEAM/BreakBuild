@@ -79,9 +79,9 @@ fi
 
 printf "\nEnter the port manager [ENTER]: "
 read admin_port
-if [ "$admin_port" == "" ] || [ $admin_port == "7777" ] || [ $admin_port -lt 2000 ] || [ $admin_port -gt 9999 ] || [ $(lsof -i -P | grep ":$admin_port " | wc -l) != "0" ]; then
-	admin_port="2411"
-	echo "Port invalid, port default: 2411"
+if [ "$admin_port" == "" ] || [ "$admin_port" == "2411" ] || [ $admin_port == "7777" ] || [ $admin_port -lt 2000 ] || [ $admin_port -gt 9999 ] || [ $(lsof -i -P | grep ":$admin_port " | wc -l) != "0" ]; then
+	admin_port="1408"
+	echo "Port invalid, port default: 1408"
 	echo
 fi
 
