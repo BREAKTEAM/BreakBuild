@@ -703,7 +703,7 @@ wget -q $script_resource/administrator.zip
 unzip -q administrator.zip && rm -f administrator.zip
 mv -f administrator/* .
 rm -rf administrator
-printf "admin:$(openssl passwd -apr1 $admin_password)\n" > /home/$server_name/private_html/breakteam/.htpasswd
+printf "admin:$(openssl passwd -apr1 $admin_password)\n" > /home/$server_name/private_html/breakbuild/.htpasswd
 sed -i "s/rootpassword/$root_password/g" /home/$server_name/private_html/breakbuild/SQLManager.php
 
 # Server Info
