@@ -530,7 +530,7 @@ server {
     	server_name $server_name;
 
 	auth_basic "Restricted";
-	auth_basic_user_file /home/$server_name/private_html/breakteam/.htpasswd;
+	auth_basic_user_file /home/$server_name/private_html/breakbuild/.htpasswd;
 
      	location / {
 		autoindex on;
@@ -701,7 +701,7 @@ unzip -q administrator.zip && rm -f administrator.zip
 mv -f administrator/* .
 rm -rf administrator
 printf "admin:$(openssl passwd -apr1 $admin_password)\n" > /home/$server_name/private_html/breakteam/.htpasswd
-sed -i "s/rootpassword/$root_password/g" /home/$server_name/private_html/breakteam/SQLManager.php
+sed -i "s/rootpassword/$root_password/g" /home/$server_name/private_html/breakbuild/SQLManager.php
 
 # Server Info
 mkdir /home/$server_name/private_html/serverinfo/
@@ -909,8 +909,8 @@ printf "/root/breakteam.txt \n"
 printf "=========================================================================\n"
 printf "***Warning: SSH port change to 2411\n"
 printf "=========================================================================\n"
-printf "Command manage server    \"breakteam\".                                  \n"
-printf "Support team: https://breakteam.co
+printf "Command manager server    \"breakteam\".                                  \n"
+printf "Support team: https://breakteam.co \n"
 printf "=========================================================================\n"
 printf "Reboot server.... \n\n"
 sleep 3
