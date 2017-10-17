@@ -6,8 +6,7 @@
 #######################################################
 break_vers="1.0.0"
 phpmyadmin_version="4.7.0" # Released 2017-03-29. Compatible with PHP 5.5 to 7.1 and MySQL 5.5 and newer
-script_root="https://aishee.net/breakbuild"
-script_url="https://aishee.net/breakbuild/breakbuild.sh"
+script_resource="http://resource.aishee.net"
 low_ram='262144' # 256MB
 
 yum -y install gawk bc wget lsof
@@ -26,7 +25,7 @@ server_ram_mb=`echo "scale=0;$server_ram_total/1024" | bc`
 server_hdd=$( df -h | awk 'NR==2 {print $2}' )
 server_swap_total=$(awk '/SwapTotal/ {print $2}' /proc/meminfo)
 server_swap_mb=`echo "scale=0;$server_swap_total/1024" | bc`
-server_ip=$(curl -s $script_root/ip/)
+server_ip=$(curl ipinfo.io/ip)
 
 printf "=========================================================================\n"
 printf "Result \n"
@@ -108,9 +107,6 @@ rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 # Install Nginx Repo
 rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
 
-# Install MariaDB Repo 10.0
-wget -O /etc/yum.repos.d/MariaDB.repo $script_url/repo/mariadb/$(uname -i)/10
-
 systemctl stop  saslauthd.service
 systemctl disable saslauthd.service
 
@@ -147,7 +143,7 @@ else
 fi
 
 # Install MariaDB
-yum -y install MariaDB-server MariaDB-client
+yum -y install mariadb-server mariadb
 
 # Install Others
 yum -y install exim syslog-ng syslog-ng-libdbi cronie iptables-services fail2ban unzip zip nano openssl ntpdate
@@ -188,7 +184,7 @@ mkdir -p /var/log/nginx
 chown -R nginx:nginx /var/log/nginx
 chown -R nginx:nginx /var/lib/php/session
 
-wget -q $script_url/html/index.html -O /home/$server_name/public_html/index.html
+wget -q $script_resource/index.html -O /home/$server_name/public_html/index.html
 
 systemctl start nginx.service
 systemctl start php-fpm.service
@@ -204,12 +200,12 @@ fi
 
 if [[ "$lessphpmem" = [yY] ]]; then
 	# echo -e "\nCopying php-fpm-min.conf /etc/php-fpm.d/www.conf\n"
-	wget -q $script_root/config/php-fpm/php-fpm-min.conf -O /etc/php-fpm.conf
-	wget -q $script_root/config/php-fpm/www-min.conf -O /etc/php-fpm.d/www.conf
+	wget -q $script_resource/php-fpm-min.conf -O /etc/php-fpm.conf
+	wget -q $script_resource/www-min.conf -O /etc/php-fpm.d/www.conf
 else
 	# echo -e "\nCopying php-fpm.conf /etc/php-fpm.d/www.conf\n"
-	wget -q $script_root/config/php-fpm/php-fpm.conf -O /etc/php-fpm.conf
-	wget -q $script_root/config/php-fpm/www.conf -O /etc/php-fpm.d/www.conf
+	wget -q $script_resource/php-fpm.conf -O /etc/php-fpm.conf
+	wget -q $script_resource/www.conf -O /etc/php-fpm.d/www.conf
 fi # lessphpmem
 
 sed -i "s/server_name_here/$server_name/g" /etc/php-fpm.conf
@@ -584,32 +580,32 @@ cp /etc/my.cnf /etc/my.cnf-original
 
 if [[ "$(expr $server_ram_total \<= 2099000)" = "1" ]]; then
 	# echo -e "\nCopying MariaDB my-mdb10-min.cnf file to /etc/my.cnf\n"
-	wget -q $script_root/config/mysql/my-mdb10-min.cnf -O /etc/my.cnf
+	wget -q $script_resource/my-mdb10-min.cnf -O /etc/my.cnf
 fi
 
 if [[ "$(expr $server_ram_total \> 2100001)" = "1" && "$(expr $server_ram_total \<= 4190000)" = "1" ]]; then
 	# echo -e "\nCopying MariaDB my-mdb10.cnf file to /etc/my.cnf\n"
-	wget -q $script_root/config/mysql/my-mdb10.cnf -O /etc/my.cnf
+	wget -q $script_resource/my-mdb10.cnf -O /etc/my.cnf
 fi
 
 if [[ "$(expr $server_ram_total \>= 4190001)" = "1" && "$(expr $server_ram_total \<= 8199999)" = "1" ]]; then
 	# echo -e "\nCopying MariaDB my-mdb10-4gb.cnf file to /etc/my.cnf\n"
-	wget -q $script_root/config/mysql/my-mdb10-4gb.cnf -O /etc/my.cnf
+	wget -q $script_resource/my-mdb10-4gb.cnf -O /etc/my.cnf
 fi
 
 if [[ "$(expr $server_ram_total \>= 8200000)" = "1" && "$(expr $server_ram_total \<= 15999999)" = "1" ]]; then
 	# echo -e "\nCopying MariaDB my-mdb10-8gb.cnf file to /etc/my.cnf\n"
-	wget -q $script_root/config/mysql/my-mdb10-8gb.cnf -O /etc/my.cnf
+	wget -q $script_resource/my-mdb10-8gb.cnf -O /etc/my.cnf
 fi
 
 if [[ "$(expr $server_ram_total \>= 16000000)" = "1" && "$(expr $server_ram_total \<= 31999999)" = "1" ]]; then
 	# echo -e "\nCopying MariaDB my-mdb10-16gb.cnf file to /etc/my.cnf\n"
-	wget -q $script_root/config/mysql/my-mdb10-16gb.cnf -O /etc/my.cnf
+	wget -q $script_resource/my-mdb10-16gb.cnf -O /etc/my.cnf
 fi
 
 if [[ "$(expr $server_ram_total \>= 32000000)" = "1" ]]; then
 	# echo -e "\nCopying MariaDB my-mdb10-32gb.cnf file to /etc/my.cnf\n"
-	wget -q $script_root/config/mysql/my-mdb10-32gb.cnf -O /etc/my.cnf
+	wget -q $script_resource/my-mdb10-32gb.cnf -O /etc/my.cnf
 fi
 
 sed -i "s/server_name_here/$server_name/g" /etc/my.cnf
@@ -646,7 +642,7 @@ chmod 600 /root/.my.cnf
 # Fix MariaDB 10
 systemctl stop mysql.service
 
-wget -q $script_root/config/mysql/mariadb10_3tables.sql
+wget -q $script_resource/mariadb10_3tables.sql
 
 rm -rf /var/lib/mysql/mysql/gtid_slave_pos.ibd
 rm -rf /var/lib/mysql/mysql/innodb_table_stats.ibd
@@ -700,7 +696,7 @@ printf "Configuration successful... \n"
 printf "=========================================================================\n"
 # BreakBuild Script Admin
 cd /home/$server_name/private_html/
-wget -q $script_url/package/administrator.zip
+wget -q $script_resource/administrator.zip
 unzip -q administrator.zip && rm -f administrator.zip
 mv -f administrator/* .
 rm -rf administrator
@@ -710,7 +706,7 @@ sed -i "s/rootpassword/$root_password/g" /home/$server_name/private_html/breakte
 # Server Info
 mkdir /home/$server_name/private_html/serverinfo/
 cd /home/$server_name/private_html/serverinfo/
-wget -q $script_url/package/serverinfo.zip
+wget -q $script_resource/serverinfo.zip
 unzip -q serverinfo.zip && rm -f serverinfo.zip
 
 # phpMyAdmin
@@ -724,7 +720,7 @@ rm -rf phpMyAdmin-$phpmyadmin_version-english*
 # eXtplorer File Manager
 mkdir /home/$server_name/private_html/filemanager/
 cd /home/$server_name/private_html/filemanager/
-wget -q $script_url/package/eXtplorer_2.1.9.zip
+wget -q $script_resource/eXtplorer_2.1.9.zip
 unzip -q eXtplorer_2.1.9.zip && rm -f eXtplorer_2.1.9.zip
 mv -f eXtplorer_2.1.9/* .
 rm -rf eXtplorer_2.1.9
@@ -842,7 +838,7 @@ break_vers="$break_vers"
 server_name="$server_name"
 server_ip="$server_ip"
 admin_port="$admin_port"
-script_url="$script_url"
+resource_url="$script_resource"
 mariadb_root_password="$root_password"
 END
 chmod 600 /etc/breakteam/scripts.conf
@@ -852,10 +848,10 @@ printf "========================================================================
 printf "Adding menu... \n"
 printf "=========================================================================\n"
 
-wget -q $script_url/breakteam -O /bin/breakteam && chmod +x /bin/breakteam
+wget -q $script_resource/breakteam -O /bin/breakteam && chmod +x /bin/breakteam
 mkdir /etc/breakteam/menu/
 cd /etc/breakteam/menu/
-wget -q $script_url/libs/menu.zip
+wget -q $script_resource/menu.zip
 unzip -q menu.zip && rm -f menu.zip
 chmod +x /etc/breakteam/menu/*
 
