@@ -7,7 +7,7 @@ prompt="Enter the selection:"
 options=("List Domain" "Add Domain" "Delete Domain" "Backup Code" "Backup Data" "Auto Backup" "Turn Off Auto Backup" "Create Database" "Delete Database" "Change VPS" "Change Admin" "Add Domain" "Add Redirect Domain" "Change Permission" "Upgrade Server") # End Options
 
 printf "=========================================================================\n"
-printf "                      BREAM TEAM - BreakBuild Script                     \n"
+printf "                      BREAK TEAM - BreakBuild Script                     \n"
 printf "=========================================================================\n"
 printf "                                Menu\n"
 printf "=========================================================================\n"
