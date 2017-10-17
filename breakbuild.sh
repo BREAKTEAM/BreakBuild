@@ -107,6 +107,9 @@ rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 # Install Nginx Repo
 rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
 
+# Install MariaDB Repo
+wget -O /etc/yum.repos.d/MariaDB.repo $script_resource/10maria_ozw
+
 systemctl stop  saslauthd.service
 systemctl disable saslauthd.service
 
