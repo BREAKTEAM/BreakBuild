@@ -723,10 +723,8 @@ rm -rf phpMyAdmin-$phpmyadmin_version-english*
 # eXtplorer File Manager
 mkdir /home/$server_name/private_html/filemanager/
 cd /home/$server_name/private_html/filemanager/
-wget -q $script_resource/eXtplorer_2.1.9.zip
-unzip -q eXtplorer_2.1.9.zip && rm -f eXtplorer_2.1.9.zip
-mv -f eXtplorer_2.1.9/* .
-rm -rf eXtplorer_2.1.9
+wget --no-check-certificate -q https://extplorer.net/attachments/download/74/eXtplorer_2.1.10.zip # Note ID 74
+unzip -q eXtplorer_$extplorer_version.zip && rm -f eXtplorer_$extplorer_version.zip
 cat > "/home/$server_name/private_html/filemanager/config/.htusers.php" <<END
 <?php
         if( !defined( '_JEXEC' ) && !defined( '_VALID_MOS' ) ) die( 'Restricted access' );
@@ -734,7 +732,6 @@ cat > "/home/$server_name/private_html/filemanager/config/.htusers.php" <<END
         array('admin','$(echo -n "$admin_password" | md5sum | awk '{print $1}')','/home','http://localhost','1','','7',1),
 );
 ?>
-END
 
 # Log Rotation
 cat > "/etc/logrotate.d/nginx" <<END
