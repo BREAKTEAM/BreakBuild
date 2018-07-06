@@ -645,7 +645,8 @@ chmod 600 /root/.my.cnf
 # Fix MariaDB 10
 systemctl stop mysql.service
 
-wget -q $script_resource/mariadb10_3tables.sql
+wget -q $script_resource/mariadb10_3tables.sql1
+mv mariadb10_3tables.sql1 mariadb10_3tables.sql
 
 rm -rf /var/lib/mysql/mysql/gtid_slave_pos.ibd
 rm -rf /var/lib/mysql/mysql/innodb_table_stats.ibd
