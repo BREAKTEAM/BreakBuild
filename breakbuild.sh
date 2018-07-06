@@ -854,6 +854,7 @@ mkdir /etc/breakteam/menu/
 cd /etc/breakteam/menu/
 wget -q $script_resource/menu.zip
 unzip -q menu.zip && rm -f menu.zip
+mv -f /etc/breakteam/menu/menu/* /etc/breakteam/menu/
 chmod +x /etc/breakteam/menu/*
 
 clear
