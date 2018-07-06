@@ -31,5 +31,5 @@ The following are installed:-
 - Monitor status server on the web, can use mobile access anywhere.
 - Change the default SSH port from 22 to 2411 SSH Brute Force Attack, with Fail2ban block IP immediately if the wrong login 3 times.
 #### Install
-curl -sO http://aishee.net/break/install && chmod +x install && ./install
+git clone https://github.com/BREAKTEAM/BreakBuild && cd BreakBuild && chmod +x breakbuild.sh && ./breakbuild.sh
 - Command : breakteam
