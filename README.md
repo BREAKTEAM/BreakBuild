@@ -1,6 +1,6 @@
 ### BreakBuild Readme
 
-BreakBuild is a free collection of shell scripts deployment of
+BreakBuild is a free collection (simple & secure) of shell scripts deployment of
 LEMP (Linux, Nginx, MySQL and PHP) for Centos
 
 Have you considered upgrading from shared hosting to a VPS or dedicated
