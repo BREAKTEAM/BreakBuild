@@ -54,9 +54,9 @@ printf "Preparing to install...                                                 
 printf "=========================================================================\n"
 
 printf "You want using PHP version??\n"
-prompt="Enter selection [1-3]: "
-php_version="7.1"; # Default PHP 7.1
-options=("PHP 7.1" "PHP 7.0" "PHP 5.6")
+prompt="Enter selection [1-3]: \n"
+php_version="7.4"; # Default PHP 7.1
+options=("PHP 7.4" "PHP 7.2" "PHP 7.1")
 PS3="$prompt"
 select opt in "${options[@]}"; do
 
