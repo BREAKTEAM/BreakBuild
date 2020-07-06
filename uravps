@@ -1,0 +1,41 @@
+#!/bin/sh
+
+. /etc/uravps/scripts.conf
+
+clear
+prompt="Enter the selection:"
+options=("List Domain" "Add Domain" "Delete Domain" "Backup Code" "Backup Data" "Auto Backup" "Turn Off Auto Backup" "Create Database" "Delete Database" "Change VPS" "Change Admin" "Add Domain" "Add Redirect Domain" "Change Permission" "Upgrade Server") # End Options
+
+printf "=========================================================================\n"
+printf "                      URAVPS - URAVPS Script                             \n"
+printf "=========================================================================\n"
+printf "                                Menu\n"
+printf "=========================================================================\n"
+PS3="
+$prompt"
+select opt in "${options[@]}" "Exit"; do
+
+    case "$REPLY" in
+	    1 ) /etc/urapvs/menu/list-domain;;
+	    2 ) /etc/uravps/menu/add-domain;;
+	    3 ) /etc/uravps/menu/delete-domain;;
+	    4 ) /etc/uravps/menu/backup-code;;
+	    5 ) /etc/uravps/menu/backup-data;;
+	    6 ) /etc/uravps/menu/auto-backup;;
+	    7 ) /etc/uravps/menu/turn-of-backup;;
+	    8 ) /etc/uravps/menu/add-database;;
+	    9 ) /etc/uravps/menu/delete-database;;
+	    10 ) /etc/uravps/menu/change-pass;;
+	    11 ) /etc/uravps/menu/change-port-admin;;
+	    12 ) /etc/uravps/menu/park-domain;;
+	    13 ) /etc/uravps/menu/forward-domain;;
+	    14 ) /etc/uravps/menu/permission;;
+	    15 ) /etc/uravps/menu/upgrade-server;;
+	    # End Menu
+
+	    $(( ${#options[@]}+1 )) ) printf "\nGoodbye!\nExit.......\n\n"; break;;
+	    *) echo "Invalid, please try again";continue;;
+
+    esac
+
+done
