@@ -6,14 +6,14 @@
 #######################################################
 break_vers="1.0.0"
 phpmyadmin_version="4.7.0" # Released 2017-03-29. Compatible with PHP 5.5 to 7.1 and MySQL 5.5 and newer
-script_resource="http://resource.aishee.net"
+script_resource="https://resource.uravps.com"
 low_ram='262144' # 256MB
 
 yum -y install gawk bc wget lsof
 
 clear
 printf "=========================================================================\n"
-printf "                           BREAK TEAM                                    \n"
+printf "                           URA VPS                                       \n"
 printf "                     Check parameter of server                           \n"
 printf "=========================================================================\n"
 
@@ -49,8 +49,8 @@ sleep 3
 
 clear
 printf "=========================================================================\n"
-printf "                           BREAK TEAM                                    \n"
-printf "Preparing to install... \n"
+printf "                           URA VPS                                       \n"
+printf "Preparing to install...                                                  \n"
 printf "=========================================================================\n"
 
 printf "You want using PHP version??\n"
@@ -61,11 +61,11 @@ PS3="$prompt"
 select opt in "${options[@]}"; do
 
     case "$REPLY" in
-    1) php_version="7.1"; break;;
-    2) php_version="7.0"; break;;
-    3) php_version="5.6"; break;;
-    $(( ${#options[@]}+1 )) ) printf "\nSetup PHP 7.1\n"; break;;
-    *) printf "Invalid, the system will install by default PHP 7.1\n"; break;;
+    1) php_version="7.4"; break;;
+    2) php_version="7.2"; break;;
+    3) php_version="7.0"; break;;
+    $(( ${#options[@]}+1 )) ) printf "\nSetup PHP 7.4\n"; break;;
+    *) printf "Invalid, the system will install by default PHP 7.4\n"; break;;
     esac
 
 done
@@ -86,13 +86,13 @@ if [ "$admin_port" == "" ] || [ "$admin_port" == "2411" ] || [ $admin_port == "7
 fi
 
 printf "=========================================================================\n"
-printf "                           BREAK TEAM                                    \n"
-printf "Preparation is complete \n"
+printf "                            URA VPS                                      \n"
+printf "Preparation is complete                                                  \n"
 printf "=========================================================================\n"
 
 
-rm -f /etc/localtime
-ln -sf /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime
+timedatectl set-timezone Asia/Ho_Chi_Minh
+ntpdate time.apple.com
 
 if [ -s /etc/selinux/config ]; then
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
@@ -105,10 +105,10 @@ yum -y install epel-release yum-utils
 rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 
 # Install Nginx Repo
-rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+rpm -Uvh http://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.18.0-1.el7.ngx.x86_64.rpm
 
 # Install MariaDB Repo
-wget -O /etc/yum.repos.d/MariaDB.repo $script_resource/10maria_ozw
+curl -sS $script_resource/mariadb_repo_setup | sudo bash
 
 systemctl stop  saslauthd.service
 systemctl disable saslauthd.service
@@ -129,17 +129,17 @@ sleep 3
 # Enable Remi Repo
 yum-config-manager --enable remi
 
-if [ "$php_version" = "7.1" ]; then
-	yum-config-manager --enable remi-php71
+if [ "$php_version" = "7.4" ]; then
+	yum-config-manager --enable remi-php74
 	yum -y install nginx php-fpm php-common php-gd php-mysqlnd php-pdo php-xml php-mbstring php-mcrypt php-curl php-opcache php-cli php-pecl-zip
+elif [ "$php_version" = "7.2" ]; then
+	yum-config-manager --enable remi-php72
+	yum -y install nginx php-fpm php-common php-gd php-mysqlnd php-pdo php-xml php-mbstring php-mcrypt php-curl php-opcache php-cli php-pecl-zip
+elif [ "$php_version" = "7.1" ]; then
+	yum-config-manager --enable remi-php71
+	yum -y install nginx php-fpm php-common php-gd php-mysqlnd php-pdo php-xml php-mbstring php-mcrypt php-curl php-opcache php-cli
 elif [ "$php_version" = "7.0" ]; then
 	yum-config-manager --enable remi-php70
-	yum -y install nginx php-fpm php-common php-gd php-mysqlnd php-pdo php-xml php-mbstring php-mcrypt php-curl php-opcache php-cli php-pecl-zip
-elif [ "$php_version" = "5.6" ]; then
-	yum-config-manager --enable remi-php56
-	yum -y install nginx php-fpm php-common php-gd php-mysqlnd php-pdo php-xml php-mbstring php-mcrypt php-curl php-opcache php-cli
-elif [ "$php_version" = "5.5" ]; then
-	yum-config-manager --enable remi-php55
 	yum -y install nginx php-fpm php-common php-gd php-mysqlnd php-pdo php-xml php-mbstring php-mcrypt php-curl php-opcache php-cli
 else
 	yum -y install nginx php-fpm php-common php-gd php-mysqlnd php-pdo php-xml php-mbstring php-mcrypt php-curl php-devel php-cli gcc
@@ -150,9 +150,6 @@ yum -y install MariaDB-server MariaDB-client
 
 # Install Others
 yum -y install exim syslog-ng syslog-ng-libdbi cronie iptables-services fail2ban unzip zip nano openssl ntpdate
-
-ntpdate asia.pool.ntp.org
-hwclock --systohc
 
 clear
 printf "=========================================================================\n"
