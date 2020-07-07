@@ -9,7 +9,7 @@ phpmyadmin_version="5.2.0" # Released 2020-03-21.
 script_resource="https://resource.uravps.com"
 low_ram='262144' # 256MB
 
-yum -y install gawk bc wget lsof
+yum -y install gawk bc wget lsof ntpdate
 
 clear
 printf "=========================================================================\n"
@@ -92,7 +92,6 @@ printf "========================================================================
 
 
 timedatectl set-timezone Asia/Ho_Chi_Minh
-yum -y ntpdate
 ntpdate time.apple.com
 
 if [ -s /etc/selinux/config ]; then
@@ -103,6 +102,7 @@ setenforce 0
 
 # Install EPEL + Remi Repo
 yum -y install epel-release yum-utils
+rpm -Uvh https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-12.noarch.rpm
 rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 
 # Install Nginx Repo
@@ -709,7 +709,7 @@ wget -q $script_resource/serverinfo.zip
 unzip -q serverinfo.zip && rm -f serverinfo.zip
 
 # phpMyAdmin
-mkdir /home/$server_name/private_html/phpmyadmin/
+mkdir -p /home/$server_name/private_html/phpmyadmin/
 cd /home/$server_name/private_html/phpmyadmin/
 wget -q https://files.phpmyadmin.net/phpMyAdmin/$phpmyadmin_version/phpMyAdmin-$phpmyadmin_version-english.zip
 unzip -q phpMyAdmin-$phpmyadmin_version-english.zip

@@ -16,7 +16,7 @@ $prompt"
 select opt in "${options[@]}" "Exit"; do
 
     case "$REPLY" in
-	    1 ) /etc/urapvs/menu/list-domain;;
+	    1 ) /etc/uravps/menu/list-domain;;
 	    2 ) /etc/uravps/menu/add-domain;;
 	    3 ) /etc/uravps/menu/delete-domain;;
 	    4 ) /etc/uravps/menu/backup-code;;
